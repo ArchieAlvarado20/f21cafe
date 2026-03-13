@@ -1,0 +1,34 @@
+ <div id="archived_modal" class="popup">
+        <div class="popup-box-archived">
+            <div class="popup-header">
+                <h2 id="popup_titles">Archived Products</h2>
+                <span class="close-btn" onclick="hideModalArchived()">&times;</span>
+            </div>
+                <div class="input-group" style="width: 100%;display:flex" >
+                       <input
+                                        type="text"
+                                        id="archived_search_box"
+                                        placeholder="Search archived item by name..."
+                                        oninput="handleSearch(this)"
+                                        >
+                           <select id="archived_category_filter" onchange="applyArchivedCategoryFilter()">
+                                <option value="">All Categories</option>
+                            </select>
+                        </div>
+            <div class="table-wrapper-archived">
+                  <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Category</th>
+                                <th>Price (₱)</th>
+                                <th>Deleted at</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="archived_list"></tbody>
+                    </table>
+            </div>
+             
+        </div>
+    </div>
