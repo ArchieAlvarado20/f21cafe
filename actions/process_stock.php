@@ -1,6 +1,5 @@
 <?php
 include 'db_connect.php';
-
 header('Content-Type: application/json');
 
 // Get the raw POST data
@@ -57,7 +56,11 @@ try {
             ");
 
             $priceStmt = $conn->prepare("
-                SELECT price FROM inventory WHERE id = ?
+               SELECT inventory.price AS price
+                FROM inventory
+                LEFT JOIN stocks 
+                ON stocks.stock_id = inventory.id
+                WHERE stocks.id = ?
             ");
 
             foreach ($items as $item) {

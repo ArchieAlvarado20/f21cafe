@@ -129,7 +129,7 @@ function setupMenuWithdraw() {
   return fetch("actions/get_withdraw-panel.php?t=" + new Date().getTime())
     .then((response) => response.json())
     .then((data) => {
-      allInventoryItems = data;
+      selectedCategoryMain = data;
       menuItems = {};
 
       data.forEach((item) => {
@@ -144,7 +144,7 @@ function setupMenuWithdraw() {
         nextId = Math.max(...allIds) + 1;
       }
 
-      searchWithdraw(allInventoryItems);
+      searchWithdraw(selectedCategoryMain);
       return true;
     })
 
@@ -410,7 +410,7 @@ function processCheckoutWithdraw() {
             "alert-success",
           );
           fetchCosts();
-          activeCategory = "All";
+
           filterWithdraw("All");
           const allBtn = Array.from(
             document.querySelectorAll(".filter-btn"),

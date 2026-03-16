@@ -7,10 +7,12 @@ let loggedInUser = null;
 let menuItems = {};
 let nextId = 1;
 
-let SelectedCategory = "";
+let selectedCategory = "";
 
 let allInventoryItems = [];
 let inventorySelectedCategory = "";
+
+allInventoryItemsMain = [];
 
 let archivedItems = [];
 let archivedSelectedCategory = "";
@@ -21,6 +23,8 @@ let productSelectedCategory = "";
 let storedPayment = 0;
 
 let productLineChart = null;
+
+let noItemCount = 0;
 
 // Product icons
 const icons = {
@@ -188,9 +192,15 @@ function doLogin() {
             staffNav.style.display = "block";
             posView.style.display = "block";
 
-            name = "Laurence";
+            if (loggedInUser.username == "staff") {
+              staff = "Laurence";
 
-            document.getElementById("cashier_staff").textContent = name;
+              document.getElementById("cashier_staff").textContent = staff;
+            } else {
+              staff = "Paul";
+
+              document.getElementById("cashier_staff").textContent = staff;
+            }
 
             switchScreen("pos");
           }
@@ -621,12 +631,14 @@ function displayReceipt(items, total, payment) {
   methodField.textContent = payment;
 
   if (loggedInUser.role === "Owner") {
-    name = "Yhaj Catinguel Uranza";
-  } else {
-    name = "Laurence";
+    staff = "Yhaj Catinguel Uranza";
+  } else if (loggedInUser.username == "staff") {
+    staff = "Laurence";
+  } else if (loggedInUser.username == "user") {
+    staff = "Paul";
   }
   // Show logged in user
-  document.getElementById("cashier").textContent = name;
+  document.getElementById("cashier").textContent = staff;
 
   const VAT_RATE = 0.12;
 
@@ -1419,7 +1431,11 @@ function showSales() {
   document.getElementById("show-cost").style.display = "none";
   document.getElementById("show-dashboard-profit").style.display = "none";
   dashboardActiveBtn("btn-sales");
-  loadInventory();
+
+  fetchSalesHistory().then(() => {
+    loadDashboard();
+    loadInventory();
+  });
 }
 
 function showCost() {
@@ -1442,6 +1458,8 @@ function showProfit() {
   dashboardActiveBtn("btn-profit");
 
   updateProfitChart();
+
+  document.getElementById("low_stock_count").textContent = noItemCount;
 
   const profit = computeTodayProfit();
 

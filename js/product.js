@@ -9,6 +9,15 @@ function loadInventory({
 
   let items = [...allInventoryItems];
 
+  //dashboard availability
+  const noItemCount = allInventoryItems.filter(
+    (item) => item.stock <= 5 && item.stock >= 0,
+  ).length;
+
+  document.getElementById("low_stock_count").textContent = noItemCount;
+
+  document.getElementById("DC_availability").textContent = noItemCount;
+
   // sort
   items.sort((a, b) => b.id - a.id);
 
@@ -43,10 +52,6 @@ function loadInventory({
   items.forEach((item) => {
     const lowStock = item.stock <= 5 && item.stock >= 0;
     const noStock = item.stock <= 0;
-
-    const lowStockCount = items.filter((item) => item.stock >= 1).length;
-
-    document.getElementById("low_stock_count").textContent = lowStockCount;
 
     const row = document.createElement("tr");
     row.innerHTML = `
@@ -130,16 +135,11 @@ function searchInventoryByName(text) {
 function populateItemCategory() {
   const select = document.getElementById("item_cat");
 
-  // Reset first
   select.innerHTML = `<option value="" hidden>Select Category</option>`;
 
-  // Fetch categories from backend
-  fetch("actions/selectCategory.php?main=0") // adjust endpoint if needed
+  return fetch("actions/selectCategory.php?main=0")
     .then((res) => res.json())
     .then((data) => {
-      if (!data || data.length === 0) return;
-
-      // Avoid duplicates in case the backend has repeated categories
       const uniqueCategories = [
         ...new Set(data.map((item) => item.name)),
       ].sort();
@@ -150,9 +150,6 @@ function populateItemCategory() {
         opt.textContent = cat;
         select.appendChild(opt);
       });
-    })
-    .catch((err) => {
-      console.error("Error loading categories:", err);
     });
 }
 
@@ -168,36 +165,23 @@ function hideModal() {
   document.getElementById("item_modal").classList.remove("show");
 }
 
-function openEditModal(itemId) {
+async function openEditModal(itemId) {
   const item = findItem(itemId);
   if (!item) return;
+
   document.getElementById("popup_title").textContent = "Edit Item";
   document.getElementById("editing_id").value = item.id;
 
-  // populate categories first
-  populateItemCategory();
+  // wait for categories
+  await populateItemCategory();
 
-  setTimeout(() => {
-    const select = document.getElementById("item_cat");
-    select.value = item.category;
-
-    if (!select.value) {
-      hideModal();
-      Swal.fire({
-        text: "Loading Categories...",
-        showConfirmButton: false,
-        timerProgressBar: true,
-        timer: 1000,
-        toast: true,
-      }).then(() => {
-        openEditModal(item.id);
-      });
-    }
-  }, 50);
+  const select = document.getElementById("item_cat");
+  select.value = item.category;
 
   document.getElementById("item_name").value = item.name;
   document.getElementById("item_price").value = item.price;
   document.getElementById("item_qty").value = item.stock;
+
   document.getElementById("item_modal").classList.add("show");
 }
 

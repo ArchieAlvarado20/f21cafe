@@ -1603,7 +1603,7 @@ body {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
-    width: 210mm !important;
+    width: 310mm !important;
     min-height: 297mm !important;
     padding: 15mm !important;
     margin: 0 !important;
@@ -3632,4 +3632,7 @@ input,
 td,
 select {
   text-transform: capitalize;
+}
+#user_name {
+  text-transform: none;
 }

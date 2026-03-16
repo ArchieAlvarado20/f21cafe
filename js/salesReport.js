@@ -25,6 +25,11 @@ function salesReport() {
 
   const criticalItems = document.getElementById("DC_critical").textContent;
 
+  const criticalProducts =
+    document.getElementById("DC_availability").textContent;
+
+  document.getElementById("low_stock_count").textContent = criticalProducts;
+
   //report main info
   let name =
     loggedInUser.username.charAt(0).toUpperCase() +
@@ -56,9 +61,11 @@ function salesReport() {
     ${longDate}
     ${report_no}
     ${report.report} 
+    No/Low Availability: ${criticalProducts}
     ------------------------
     ${reportCost.reportCost}
-    Critical Items: ${criticalItems}`;
+    Critical Items: ${criticalItems}
+    Handled by: ${name}`;
       sendSMS(fullReport);
       Swal.fire({
         toast: true,
@@ -81,8 +88,9 @@ function hideSalesReport() {
 }
 
 function sendSMS(message) {
+  //archie
   const API_KEY = "f1673f69-42ab-4dee-a9ce-1acdfeb1d4f6";
-  const owners = ["+639925440116", "09927270042"]; //, "+639619826022"
+  const owners = ["+639927270042"]; // "09619826022"
 
   fetch(
     "https://api.textbee.dev/api/v1/gateway/devices/69ad36aa937185499c44e77a/send-sms",
@@ -100,6 +108,11 @@ function sendSMS(message) {
   )
     .then((res) => res.json())
     .then((data) => console.log(data));
+
+  fetchSalesHistory().then(() => {
+    loadDashboard();
+    loadInventory();
+  });
 }
 let profitChart = null; // global para ma-update
 
@@ -168,13 +181,10 @@ function updateProfitChart() {
 }
 
 function computeTodayProfit() {
-  const dashboardData = loadDashboard();
-  const dashboardDataCost = loadDashboardCost();
+  const revenue = Number(loadDashboard()?.totalRevenue) || 0;
+  const cost = Number(loadDashboardCost()?.totalRevenueCosts) || 0;
 
-  const profit =
-    dashboardData.totalRevenue - dashboardDataCost.totalRevenueCosts;
-
-  return profit;
+  return revenue - cost;
 }
 
 function doPrintSalesReport() {

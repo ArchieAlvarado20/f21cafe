@@ -18,7 +18,8 @@
             <p class="demo-info">
                 <strong>Demo Accounts:</strong><br>
                 Owner: owner / admin123<br>
-                Staff: staff / staff123
+                Staff: staff / staff123<br>
+                Staff2: user / user123
             </p>
         </div>
     </div>

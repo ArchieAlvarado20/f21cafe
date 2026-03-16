@@ -4,12 +4,21 @@ function inventoryMain() {
   fetch("actions/get_inventory-main.php?t=" + new Date().getTime())
     .then((response) => response.json())
     .then((data) => {
-      allInventoryItems = data || [];
+      allInventoryItemsMain = data || [];
 
       const table = document.getElementById("inventory_main");
       table.innerHTML = "";
 
-      if (allInventoryItems.length === 0) {
+      const noStockCount = allInventoryItemsMain.filter(
+        (item) => item.total_qty <= 5 && item.total_qty >= 0,
+      ).length;
+
+      document.getElementById("low_stock_count_costs").textContent =
+        noStockCount;
+
+      document.getElementById("DC_critical").textContent = noStockCount;
+
+      if (allInventoryItemsMain.length === 0) {
         table.innerHTML = `
           <tr>
             <td colspan="5" style="text-align:center; padding:20px; color:#888;">
@@ -21,7 +30,9 @@ function inventoryMain() {
       }
 
       // Sort newest first
-      const sortedItems = [...allInventoryItems].sort((a, b) => b.id - a.id);
+      const sortedItems = [...allInventoryItemsMain].sort(
+        (a, b) => b.id - a.id,
+      );
 
       // Filter by category if selected
       let filteredItems = [...sortedItems];
@@ -35,15 +46,6 @@ function inventoryMain() {
       filteredItems.forEach((item) => {
         const lowStock = item.total_qty <= 5;
         const noStock = item.total_qty <= 0;
-
-        const noStockCount = filteredItems.filter(
-          (item) => item.total_qty <= 5 && item.total_qty >= 0,
-        ).length;
-
-        document.getElementById("low_stock_count_costs").textContent =
-          noStockCount;
-
-        document.getElementById("DC_critical").textContent = noStockCount;
 
         const row = document.createElement("tr");
 
@@ -64,7 +66,7 @@ function inventoryMain() {
       });
 
       // Populate category select dynamically
-      populateInventoryCategoryFilterMain(allInventoryItems);
+      populateInventoryCategoryFilterMain(allInventoryItemsMain);
     })
     .catch((error) => {
       console.error("Error loading inventory:", error);
@@ -102,12 +104,13 @@ function hideModalStock() {
 // Find item by ID
 function findItemMain(itemId) {
   return (
-    allInventoryItems.find((item) => Number(item.id) === Number(itemId)) || null
+    allInventoryItemsMain.find((item) => Number(item.id) === Number(itemId)) ||
+    null
   );
 }
 
 // Open edit modal
-function openEditModalMain(itemId) {
+async function openEditModalMain(itemId) {
   const item = findItemMain(itemId);
   if (!item) return;
 
@@ -115,25 +118,10 @@ function openEditModalMain(itemId) {
   document.getElementById("editing_id_main").value = item.id;
 
   // populate categories first
-  populateItemCategoryMain();
+  await populateItemCategoryMain();
 
-  setTimeout(() => {
-    const select = document.getElementById("item_cat_main");
-    select.value = item.category;
-
-    if (!select.value) {
-      hideModalMain();
-      Swal.fire({
-        text: "Loading Categories...",
-        showConfirmButton: false,
-        timerProgressBar: true,
-        timer: 1000,
-        toast: true,
-      }).then(() => {
-        openEditModalMain(item.id); // direct number, no need for ${}
-      });
-    }
-  }, 50);
+  const select = document.getElementById("item_cat_main");
+  select.value = item.category;
 
   document.getElementById("item_name_main").value = item.name;
   // document.getElementById("item_price_main").value = item.price;
@@ -342,7 +330,7 @@ function searchInventoryByNameMain(searchText) {
   table.innerHTML = "";
 
   // Use the correct array
-  let filtered = allInventoryItems.filter((item) =>
+  let filtered = allInventoryItemsMain.filter((item) =>
     item.name.toLowerCase().includes(searchText.toLowerCase()),
   );
 
@@ -395,7 +383,7 @@ function populateItemCategoryMain() {
   select.innerHTML = `<option value="" hidden>Select Category</option>`;
 
   // Fetch categories from backend
-  fetch("actions/selectCategory.php?main=1") // adjust endpoint if needed
+  return fetch("actions/selectCategory.php?main=1") // adjust endpoint if needed
     .then((res) => res.json())
     .then((data) => {
       if (!data || data.length === 0) return;
@@ -411,9 +399,6 @@ function populateItemCategoryMain() {
         opt.textContent = cat;
         select.appendChild(opt);
       });
-    })
-    .catch((err) => {
-      console.error("Error loading categories:", err);
     });
 }
 

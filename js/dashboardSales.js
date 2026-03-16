@@ -1,4 +1,5 @@
 let transactionHistorySales = [];
+let productAvailability = 0;
 
 function fetchHistorySales() {
   return fetch("actions/get_sales.php?t=" + new Date().getTime())
@@ -40,6 +41,8 @@ function loadDashboard() {
     (item) => item.stock >= 1,
   ).length;
   document.getElementById("low_stock_count").textContent = lowStockCount;
+
+  productAvailability = lowStockCount;
 
   const totalRevenue = todayTransactions.reduce((sum, t) => sum + t.total, 0);
   const orderCount = todayTransactions.length;

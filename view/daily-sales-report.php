@@ -22,6 +22,7 @@
             <p><strong>Total Sales:</strong> ₱<span id="TS_report">0.00</span></p>
             <p><strong>Orders:</strong> <span id="TO_report">0</span></p>
             <p><strong>Average Order:</strong> ₱<span id="AV_report">0.00</span></p>
+            <p><strong>Low/No Available:</strong> <span id="DC_availability">0</span></p>
           </div>
 
           <!-- COSTS CARD -->

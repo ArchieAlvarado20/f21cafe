@@ -9,7 +9,7 @@ $dbname = "f21_cafe";
 // $host = "sql202.infinityfree.com";      
 // $user = "if0_41379736";           
 // $pass = "Ellengay1";               
-// $dbname = "if0_41379736"; 
+// $dbname = "if0_41379736_f21cafe"; 
 
 //Award Space
 // $host = "fdb1033.awardspace.net";      
@@ -25,4 +25,6 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+/* SET PH TIMEZONE */
+$conn->query("SET time_zone = '+08:00'");
 ?>

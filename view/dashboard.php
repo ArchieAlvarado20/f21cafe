@@ -19,8 +19,8 @@
                             <div class="stat-number" id="avg_order">₱0.00</div>
                             <div class="stat-desc">Per Transaction</div>
                         </div>
-                        <div class="stat-box" style="display: none;">
-                            <h3>Low Availability</h3>
+                        <div class="stat-box">
+                            <h3>No/Low Availability</h3>
                             <div class="stat-number" id="low_stock_count">0</div>
                             <div class="stat-desc">Need to Buffer</div>
                         </div>

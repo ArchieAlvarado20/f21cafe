@@ -32,9 +32,15 @@ fetch("actions/get_session.php?t=" + new Date().getTime())
           staffNav.style.display = "block";
           posView.style.display = "block";
 
-          name = "Laurence";
+          if (loggedInUser.username == "staff") {
+            staff = "Laurence";
 
-          document.getElementById("cashier_staff").textContent = name;
+            document.getElementById("cashier_staff").textContent = staff;
+          } else {
+            staff = "Paul";
+
+            document.getElementById("cashier_staff").textContent = staff;
+          }
 
           switchScreen("pos");
         }
