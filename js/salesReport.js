@@ -90,7 +90,7 @@ function hideSalesReport() {
 function sendSMS(message) {
   //archie
   const API_KEY = "f1673f69-42ab-4dee-a9ce-1acdfeb1d4f6";
-  const owners = ["+639927270042"]; // "09619826022"
+  const owners = ["09619826022"];
 
   fetch(
     "https://api.textbee.dev/api/v1/gateway/devices/69ad36aa937185499c44e77a/send-sms",
