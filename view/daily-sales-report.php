@@ -47,7 +47,7 @@
 
     <!-- ACTIONS -->
     <div class="receipt-actions">
-      <button class="print-btn" id="sendSMSBtn" onclick="showSalesReport()">SEND SMS ➤</button>
+      <button class="print-btn" id="sendSMSBtn">SEND SMS ➤</button>
       <button class="print-btn" onclick="doPrintSalesReport()">🖨️ Print</button>
       <button class="close-btn" onclick="hideSalesReport()">Close</button>
     </div>

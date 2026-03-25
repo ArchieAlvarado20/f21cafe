@@ -1,4 +1,4 @@
-function switchScreen(screenName) {
+async function switchScreen(screenName) {
   // 1️⃣ Save current screen
   localStorage.setItem("activeScreen", screenName);
 
@@ -39,26 +39,42 @@ function switchScreen(screenName) {
       loadInventory();
     });
   } else if (screenName === "pos" && typeof searchProducts === "function") {
-    setupMenu().then(() => {
+    try {
+      await setupMenu();
       // Only after data is loaded, render inventory table
       loadInventory();
-      populateFilterButtons();
-      searchProducts();
-    });
-    filterProducts("All");
-    clearInput("search_box");
+      Promise.resolve()
+        .then(() => {
+          populateFilterButtons();
+          clearInput("search_box");
+        })
+        .then(() => {
+          searchProducts();
+        });
+      filterProducts("All");
+    } catch (err) {
+      console.error("Failed to fetch dashboard data:", err);
+    }
   } else if (
     screenName === "withdraw" &&
-    typeof searchProducts === "function"
+    typeof searchWithdraw === "function"
   ) {
-    setupMenuWithdraw().then(() => {
-      // Only after data is loaded, render inventory table
+    try {
+      await setupMenuWithdraw();
+
       inventoryMain();
-      populateFilterButtonsWithdraw();
-      searchWithdraw();
-    });
-    filterWithdraw("All");
-    clearInput("stock_search_box");
+      clearInput("stock_search_box");
+      Promise.resolve()
+        .then(() => {
+          populateFilterButtonsWithdraw();
+        })
+        .then(() => {
+          searchWithdraw();
+        });
+      filterWithdraw("All");
+    } catch (err) {
+      console.error("Failed to fetch dashboard data:", err);
+    }
   } else if (screenName === "inventory-main") {
     inventoryMain();
     clearInput("inventory_search_box_main");

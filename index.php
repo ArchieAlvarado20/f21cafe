@@ -104,9 +104,7 @@
    
     
      <script src="js/script.js?"></script>
-     <script src="js/category.js?"></script>    
-     <script src="js/router.js"></script>
-     <script src="js/session.js"></script>
+     <script src="js/category.js?"></script>   
      <script src="js/inventory.js?"></script>
      <script src="js/inventory_archived.js?"></script>
      <script src="js/product.js?"></script>
@@ -114,6 +112,8 @@
      <script src="js/dashboardCost.js"></script>
      <script src="js/dashboardSales.js"></script>
      <script src="js/salesReport.js"></script>
+     <script src="js/session.js"></script>
+     <script src="js/router.js"></script>
       
 </body>
 </html>

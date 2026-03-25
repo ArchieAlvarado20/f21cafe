@@ -56,15 +56,12 @@ function loadDashboardCost() {
   if (todayTransactionsCosts.length === 0) {
     recentDivCosts.innerHTML =
       '<p class="placeholder-text">No transactions today.</p>';
-    return;
   }
 
-  const reportCost = `
-      DAILY COSTS REPORT:
-      Total Cost: ₱${totalRevenueCosts.toFixed(2)}
-      Withdrawals: ${orderCountCosts}
-      Average Withdrawal: ₱${averageValueCosts.toFixed(2)}
-      `;
+  const reportCost = `DAILY COSTS REPORT:
+Total Cost: ₱${totalRevenueCosts.toFixed(2)}
+Withdrawals: ${orderCountCosts}
+Average Withdrawal: ₱${averageValueCosts.toFixed(2)}`;
 
   const recent = todayTransactionsCosts.slice(0, 5);
 

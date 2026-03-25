@@ -36,12 +36,19 @@ function salesReport() {
     loggedInUser.username.slice(1);
 
   if (loggedInUser.role === "Owner") {
-    name = "Yhaj Catinguel Uranza";
+    name = "Yhaj";
   }
 
   document.getElementById("cashier_report").textContent = name;
+
+  let sending = false;
+
   document.getElementById("sendSMSBtn").addEventListener("click", function () {
+    if (sending) return; // block if already sending
+    sending = true;
+
     try {
+      // your code to generate report
       const now = new Date();
       const longDate = now.toLocaleDateString("en-PH", {
         weekday: "long",
@@ -55,18 +62,21 @@ function salesReport() {
       const report = loadDashboard();
       const reportCost = loadDashboardCost();
 
-      const fullReport = `
-    F_21 CAFE
+      const fullReport = `F_21 CAFE
 
-    ${longDate}
-    ${report_no}
-    ${report.report} 
-    No/Low Availability: ${criticalProducts}
-    ------------------------
-    ${reportCost.reportCost}
-    Critical Items: ${criticalItems}
-    Handled by: ${name}`;
+${longDate}
+${report_no}
+------------------------
+${report.report} 
+No/Low Availability: ${criticalProducts}
+------------------------
+${reportCost.reportCost}
+Critical Items: ${criticalItems}
+------------------------
+Handled by: ${name}`;
+
       sendSMS(fullReport);
+
       Swal.fire({
         toast: true,
         position: "top-end",
@@ -75,10 +85,11 @@ function salesReport() {
         showConfirmButton: false,
         timer: 5000,
         timerProgressBar: true,
-        toast: true,
       });
     } catch (err) {
       console.error("Failed to generate report:", err);
+    } finally {
+      sending = false; // reset after done
     }
   });
 }
@@ -88,12 +99,12 @@ function hideSalesReport() {
 }
 
 function sendSMS(message) {
-  //archie
-  const API_KEY = "f1673f69-42ab-4dee-a9ce-1acdfeb1d4f6";
-  const owners = ["09619826022"];
+  //abe
+  const API_KEY = "4f471e78-c75d-4fcf-be14-915bb2686590";
+  const owners = ["09619826022"]; // "09619826022"
 
   fetch(
-    "https://api.textbee.dev/api/v1/gateway/devices/69ad36aa937185499c44e77a/send-sms",
+    "https://api.textbee.dev/api/v1/gateway/devices/69aed54b60c621bb9a2c1a0d/send-sms",
     {
       method: "POST",
       headers: {

@@ -1,4 +1,5 @@
 let activeCategory = "All";
+let activeCategoryWithdraw = "All";
 let orderList = [];
 let orderListWithdraw = [];
 let transactionHistory = [];
@@ -631,7 +632,7 @@ function displayReceipt(items, total, payment) {
   methodField.textContent = payment;
 
   if (loggedInUser.role === "Owner") {
-    staff = "Yhaj Catinguel Uranza";
+    staff = "Yhaj";
   } else if (loggedInUser.username == "staff") {
     staff = "Laurence";
   } else if (loggedInUser.username == "user") {
@@ -1281,29 +1282,40 @@ function openSalesReportModal() {
 }
 
 // Modal for product report(Sales and sold)
-function showProductReportModal(itemId) {
-  document.getElementById("popup_titles").textContent = "Product Sales Report";
-  document.getElementById("product_report_modal").classList.add("show");
+async function showProductReportModal(itemId) {
+  const modal = document.getElementById("product_report_modal");
+  const title = document.getElementById("popup_titles");
 
-  // 📋 TABLE DATA (summary)
-  fetch("actions/get_product_report.php", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ item_id: itemId }),
-  })
-    .then((res) => res.json())
-    .then((data) => loadProductStatus(data))
-    .catch((err) => console.error("Table error:", err));
+  title.textContent = "Product Sales Report";
+  modal.classList.add("show");
 
-  // 📈 LINE CHART DATA (trend)
-  fetch("actions/get_product_chart.php", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ item_id: itemId }),
-  })
-    .then((res) => res.json())
-    .then((data) => renderProductLineChart(data))
-    .catch((err) => console.error("Chart error:", err));
+  try {
+    // 📋 TABLE DATA (summary)
+    const tableRes = await fetch("actions/get_product_report.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ item_id: itemId }),
+    });
+
+    const tableData = await tableRes.json();
+    loadProductStatus(tableData);
+  } catch (err) {
+    console.error("Table error:", err);
+  }
+
+  try {
+    // 📈 LINE CHART DATA (trend)
+    const chartRes = await fetch("actions/get_product_chart.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ item_id: itemId }),
+    });
+
+    const chartData = await chartRes.json();
+    renderProductLineChart(chartData);
+  } catch (err) {
+    console.error("Chart error:", err);
+  }
 }
 
 function hideModalProductReport() {

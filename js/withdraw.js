@@ -7,7 +7,8 @@ function searchWithdraw() {
 
   let filtered = getAllItems().filter((item) => {
     const catMatch =
-      activeCategory === "All" || item.category === activeCategory;
+      activeCategoryWithdraw === "All" ||
+      item.category === activeCategoryWithdraw;
     const nameMatch = item.name.toLowerCase().includes(searchText);
     return catMatch && nameMatch;
   });
@@ -427,7 +428,7 @@ function processCheckoutWithdraw() {
             orderListWithdraw = [];
             refreshCartWithdraw();
             searchWithdraw();
-            activeCategory = "All";
+            activeCategoryWithdraw = "All";
           });
 
           if (loggedInUser.role === "Owner") loadDashboardCost();
@@ -449,7 +450,7 @@ function processCheckoutWithdraw() {
 }
 
 function filterWithdraw(category, btn) {
-  activeCategory = category;
+  activeCategoryWithdraw = category;
   document
     .querySelectorAll(".filter-btn")
     .forEach((b) => b.classList.remove("active"));
@@ -483,7 +484,7 @@ function displayStockReport(items, total, payment) {
   total_qty.textContent = totalQty;
 
   if (loggedInUser.role === "Owner") {
-    name = "Yhaj Catinguel Uranza";
+    name = "Yhaj";
   }
   // Show logged in user
   document.getElementById("cashier_stock").textContent = name;

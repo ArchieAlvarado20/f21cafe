@@ -1534,6 +1534,8 @@ body {
   @page {
     size: A4;
     margin: 0;
+    display: flex;
+    justify-content: center;  
   }
 
   body {
@@ -1556,10 +1558,11 @@ body {
   }
 
   .receipt-print {
-    width: 80mm !important;
-    margin: 0 auto !important;
-    padding: 0 !important;
-    background: white !important;
+    width: 80mm;
+    margin: 0 auto;
+    padding: 0;
+    background: white;
+    text-align: center;
   }
 
   /* ===============================

@@ -56,10 +56,10 @@ function loadCategoryMain() {
           <td>${item.created_at}</td>
        
         `;
-   // <td>
-          //   <button class="edit-btn" onclick="showEditModal_InventoryCategory(${item.id})">Edit</button>
-          //   <button class="delete-btn" onclick="removeItemCategory(${item.id})">Delete</button>
-          // </td>
+        // <td>
+        //   <button class="edit-btn" onclick="showEditModal_InventoryCategory(${item.id})">Edit</button>
+        //   <button class="delete-btn" onclick="removeItemCategory(${item.id})">Delete</button>
+        // </td>
         table.appendChild(row);
       });
     })

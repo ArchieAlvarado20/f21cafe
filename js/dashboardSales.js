@@ -62,12 +62,10 @@ function loadDashboard() {
     recentDiv.innerHTML =
       '<p class="placeholder-text">No transactions today.</p>';
   } else {
-    const report = `
-      DAILY SALES REPORT:
-      Total Sales: ₱${totalRevenue.toFixed(2)}
-      Orders: ${orderCount}
-      Average Order: ₱${averageValue.toFixed(2)}
-    `;
+    const report = `DAILY SALES REPORT:
+Total Sales: ₱${totalRevenue.toFixed(2)}
+Orders: ${orderCount}
+Average Order: ₱${averageValue.toFixed(2)}`;
 
     const recent = todayTransactions.slice(0, 5);
     recentDiv.innerHTML = recent
